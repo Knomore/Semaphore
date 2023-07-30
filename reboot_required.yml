@@ -1,0 +1,23 @@
+---
+- name: check if system reboot is required
+  hosts: "*"
+  become: yes
+  tasks:
+    - name: check if system reboot is required
+      become: true
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_required
+    - debug:
+        msg: "Reboot is required"
+      when: reboot_required.stat.exists
+    - name: send discord message when a server needs to be restarted
+      uri:
+        url: "https://discord.com/api/webhooks/1135331858314432532/szy_Pqr81m1mJjiiIRw63EBAVzucFquFxSFdaNITh73ElwosIxT0LBA67jZd_EuAGM8S"
+        method: POST
+        body_format: json
+        body: '{"content": "{{ inventory_hostname }} needs to be rebooted."}'
+        headers:
+          Content-Type: application/json
+        status_code: 204
+      when: reboot_required.stat.exists
