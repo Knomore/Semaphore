@@ -2,7 +2,7 @@
 - name: Install ne and net-tools
   hosts: "*"
   become: true
-   tasks:
+  tasks:
     - name: Update apt cache (for Debian/Ubuntu)
       apt:
         update_cache: yes
