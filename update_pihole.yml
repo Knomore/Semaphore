@@ -1,0 +1,15 @@
+- hosts: pihole 
+  tasks:
+    - name: Update pihole
+      command: pihole -up
+
+    - name: send discord message when pihole is updated
+      uri:
+        url: "https://discord.com/api/webhooks/1135331858314432532/szy_Pqr81m1mJjiiIRw63EBAVzucFquFxSFdaNITh73ElwosIxT0LBA67jZd_EuAGM8S"
+        method: POST
+        body_format: json
+        body: '{"content": "Pi Hole was Updated"}'
+        headers:
+          Content-Type: application/json
+        status_code: 204
+      when: result is changed
